@@ -66,6 +66,37 @@ ulong MakeNumberFromIntArray(ulong[] array)
     return result;
 }
 
+ulong CalculateWaysToWinRaceWithQuadraticEquation(ulong time, ulong recordDistance)
+{
+    // distance = x*(time - x) => 0 = x*(time - x) - distance => -x^2 + time*x - distance = 0
+    // a = -1, b = time, c = -distance
+    // x1 = -b - sqrt(delta) / 2a; x2 = -b + sqrt(delta) / 2a; where delta = b^2 - 4ac
+    // x1 and x2 ar integers so min x should be rounded up (ceil) and max x rounded down (floor)
+    // so xmax - xmin + 1 (because it is inclusive) = number of ways to win the race
+    // the same idea could be used to make part 1 of this challange
+
+    // Calculate coefficients for the quadratic equation
+    double a = -1;
+    var b = (double)time;
+    var c = -(double)recordDistance;
+
+    double delta = b * b - 4 * a * c;
+    if (delta < 0) return 0; // No real solutions, cannot win the race
+
+    // Calculate the two possible solutions
+    double x1 = (-b - Math.Sqrt(delta)) / (2 * a);
+    double x2 = (-b + Math.Sqrt(delta)) / (2 * a);
+
+    // Calculate the minimum and maximum values of x
+    ulong xmin = (ulong)Math.Ceiling(Math.Min(x1, x2));
+    ulong xmax = (ulong)Math.Floor(Math.Max(x1, x2));
+
+    // Calculate the number of ways to win the race
+    ulong numberOfWays = (xmax >= xmin) ? (ulong)(xmax - xmin + 1) : 0;
+
+    return numberOfWays;
+}
+
 
 var lines = GetLinesOfInput("input.txt");
 
@@ -82,10 +113,16 @@ for(int i = 0; i < times.Length; i++)
 }
 Console.WriteLine($"Combinations of ways to win: {combinationsOfWaysToWin}");
 
-// Part 2
+// Part 2 - brute force easy solution
 Console.WriteLine("Treat Times and Recors input as one Time int and one Record int (igonre whitespaces)");
 var numberOfWaysToWinOneRace = GetNumberOfWaysToWin(
     MakeNumberFromIntArray(times),
     MakeNumberFromIntArray(records));
 
 Console.WriteLine($"Combinations of ways to win one race (part 2 of the challange): {numberOfWaysToWinOneRace}");
+
+// Part 2 - quadratic equation solution
+var numberOfWaysToWinOneRace2 = CalculateWaysToWinRaceWithQuadraticEquation(
+    MakeNumberFromIntArray(times),
+    MakeNumberFromIntArray(records));
+Console.WriteLine($"Combinations of ways to win one race (part 2 of the challange): {numberOfWaysToWinOneRace2}");
