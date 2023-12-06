@@ -66,6 +66,7 @@ ulong MakeNumberFromIntArray(ulong[] array)
     return result;
 }
 
+
 var lines = GetLinesOfInput("input.txt");
 
 // Part 1
