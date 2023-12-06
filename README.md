@@ -1,1 +1,1 @@
-### Solutions to tasks from the [Advent of Code](https://adventofcode.com/) coding challange.
+### Solutions to tasks from the [Advent of Code](https://adventofcode.com/) coding challenge.
